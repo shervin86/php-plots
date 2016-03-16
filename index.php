@@ -21,11 +21,11 @@ $script_path = str_replace("//","/","/".$script_path);
 chdir( $target_folder  )
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo $script_path."/res/theme.css"; ?>" />
-<link rel="stylesheet" type="text/css" href="<?php echo $script_path."/res/style.css"; ?>" />
-<script language="javascript" type="text/javascript" src="<?php echo $script_path."/res/jquery.js" ?>" ></script>
-<script language="javascript" type="text/javascript" src="<?php echo $script_path."/res/jquery-ui.js" ?>" ></script>
-<script language="javascript" type="text/javascript" src="<?php echo $script_path."/res/style.js" ?>" ></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $script_path."res/theme.css"; ?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo $script_path."res/style.css"; ?>" />
+<script language="javascript" type="text/javascript" src="<?php echo $script_path."res/jquery.js" ?>" ></script>
+<script language="javascript" type="text/javascript" src="<?php echo $script_path."res/jquery-ui.js" ?>" ></script>
+<script language="javascript" type="text/javascript" src="<?php echo $script_path."res/style.js" ?>" ></script>
 <script language="javascript" type="text/javascript">
 $(function() {
           $(".numbers-row").append('<span class="button">+</span>&nbsp;&nbsp;<span class="button">-</span>');
@@ -53,7 +53,7 @@ $(function() {
 </script>
 
 <head>
-<?php print $pruned_uri; ?>
+<?php print $script_path; ?>
 </head>
 
 <body>
@@ -135,20 +135,16 @@ if ($_GET['noplots']) {
 
 	$filenames = array();
 	foreach ($folders as $fo) {
-		//print $fo."\n";
 		foreach ($main_exts as $ex ) {
-			//print $ex;
 			$filenames = array_merge($filenames, glob($fo.$ex));
 		}
 	}
 	sort($filenames);
 	foreach ($filenames as $filename) {
-		//print $filename;
 		$filename = str_replace($_SERVER['DOCUMENT_ROOT'].$folder, "", $filename);
 		if( ! $matchf($match,$filename) ) { continue; }
 		/// if (isset($_GET['match']) && !fnmatch('*'.$_GET['match'].'*', $filename)) continue;
 		$path_parts = pathinfo($filename);
-		print $path_parts['basename'];
 		if (PHP_VERSION_ID < 50200) {
 			$path_parts['filename'] = str_replace('.'.$path_parts['extension'],"",$path_parts['basename']);
 		}
