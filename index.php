@@ -53,7 +53,7 @@ $(function() {
 </script>
 
 <head>
-
+<?php print $pruned_uri; ?>
 </head>
 
 <body>
@@ -62,7 +62,8 @@ $(function() {
 <?php
 $has_subs = false;
 $folders = array();
-$allfiles = glob("*");
+$allfiles = glob($_SERVER['DOCUMENT_ROOT'].$folder."*");
+//$allfiles = str_replace($_SERVER['DOCUMENT_ROOT'], "", $allfiles);
 usort($allfiles, create_function('$a,$b', 'return filemtime($b) - filemtime($a);'));
 foreach ($allfiles as $filename) {
 	if (is_dir($filename)) {
@@ -81,6 +82,7 @@ if ($has_subs) {
     }
     print "</h2>\n";
     foreach ($folders as $filename) {
+		$filename = str_replace($_SERVER['DOCUMENT_ROOT'].$folder, "", $filename);
 	    print " <a href=\"$filename\">[$filename]</a>";
     }
     print "</div>";
@@ -202,7 +204,7 @@ if ($_GET['noplots']) {
 <div style="display: block; clear:both;">
 <h2><a name="files">Other files</a></h2>
 <ul>
-<?
+<?php
 foreach ($allfiles as $filename) {
     if ($_GET['noplots'] || !in_array($filename, $displayed)) {
 	    /// if (isset($_GET['match']) && !fnmatch('*'.$_GET['match'].'*', $filename)) continue;
@@ -212,9 +214,10 @@ foreach ($allfiles as $filename) {
 	    }
 	if ( substr($filename,-1) == "~" ) continue;
         if (is_dir($filename)) {
-		// print "<li>[DIR] <a href=\"$filename\">$filename</a></li>";
+			// print "<li>[DIR] <a href=\"$filename\">$filename</a></li>";
         } else {
-            print "<li><a href=\"$filename\">$filename</a></li>";
+			$displayfilename = str_replace($_SERVER['DOCUMENT_ROOT'].$folder, "", $filename);
+			print "<li><a href=\"$displayfilename\">$displayfilename</a></li>";
         }
     }
 }
