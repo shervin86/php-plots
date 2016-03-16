@@ -124,25 +124,31 @@ if ($_GET['noplots']) {
 } else {
 	$other_exts = array('.pdf', '.cxx', '.eps', '.ps', '.root', '.txt', ".C");
 	$main_exts = array('.png','.gif','.jpg','.jpeg');
-	$folders = array('*');
+	$folders = array($_SERVER['DOCUMENT_ROOT'].$folder."*");
 	if( intval($_GET['depth'])>1 ) {
-		$wildc="*";
+		$wildc=$_SERVER['DOCUMENT_ROOT'].$folder."*";
 		for( $de=2; $de<=intval($_GET['depth']); $de++ ){
 			$wildc = $wildc."/*";
 			array_push( $folders, $wildc );
 		}
 	}
+
 	$filenames = array();
 	foreach ($folders as $fo) {
+		//print $fo."\n";
 		foreach ($main_exts as $ex ) {
+			//print $ex;
 			$filenames = array_merge($filenames, glob($fo.$ex));
 		}
 	}
 	sort($filenames);
 	foreach ($filenames as $filename) {
+		//print $filename;
+		$filename = str_replace($_SERVER['DOCUMENT_ROOT'].$folder, "", $filename);
 		if( ! $matchf($match,$filename) ) { continue; }
 		/// if (isset($_GET['match']) && !fnmatch('*'.$_GET['match'].'*', $filename)) continue;
 		$path_parts = pathinfo($filename);
+		print $path_parts['basename'];
 		if (PHP_VERSION_ID < 50200) {
 			$path_parts['filename'] = str_replace('.'.$path_parts['extension'],"",$path_parts['basename']);
 		}
